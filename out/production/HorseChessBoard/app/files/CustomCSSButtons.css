@@ -1,0 +1,5 @@
+.toggle-button {
+  -fx-graphic: url('http://icons.iconarchive.com/icons/kyo-tux/aeon/128/Filetype-Blank-icon.png');
+  -fx-background-color: transparent;
+  -fx-border-color: grey;
+}
