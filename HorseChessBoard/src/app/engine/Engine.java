@@ -26,16 +26,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 public class Engine extends Application implements EventHandler<ActionEvent>, IEngine {
 
     private static final int MAX_BUTTONS = 9;
-    private static final String MEDIA1 = "src\\app\\audio_files\\Horse_neigh1.wav";
-    private static final String MEDIA2 = "src\\app\\audio_files\\Horse_neigh2.wav";
-    private static final String CSS_PATH = "..\\buttons\\CustomCSSButtons.css";
+    private static final String MEDIA1 = "/app/files/Horse_neigh1.wav";
+    private static final String MEDIA2 = "/app/files/Horse_neigh2.wav";
+    private static final String CSS_PATH = "app/files/CustomCSSButtons.css";
 
     private Image unselected;
     private Image horseSelected;
@@ -142,12 +142,9 @@ public class Engine extends Application implements EventHandler<ActionEvent>, IE
         for (int i = 0; i < MAX_BUTTONS; i++) {
             buttonsHorse[i] = new CustomButton();
             buttonsDest[i] = new CustomButton();
-            buttonsHorse[i].getStylesheets().add(this.getClass()
-                    .getResource(CSS_PATH)
-                    .toExternalForm());
-            buttonsDest[i].getStylesheets().add(this.getClass()
-                    .getResource(CSS_PATH)
-                    .toExternalForm());
+
+            buttonsHorse[i].getStylesheets().add(CSS_PATH);
+            buttonsDest[i].getStylesheets().add(CSS_PATH);
 
             buttonsHorse[i].setPrefSize(128, 128);
             buttonsDest[i].setPrefSize(128, 128);
@@ -219,7 +216,7 @@ public class Engine extends Application implements EventHandler<ActionEvent>, IE
 
         if (fromX == toX && fromY == toY) {
             textArea.setText("Horse\nposition and\ndestination\ncoincide");
-            coordinatesArea.setText("["+fromX+","+fromY+"]");
+            coordinatesArea.setText("[" + fromX + "," + fromY + "]");
             optionToDrawImageOnButton = 0;
             scene.setCursor(Cursor.DEFAULT);
             return;
@@ -270,14 +267,14 @@ public class Engine extends Application implements EventHandler<ActionEvent>, IE
     }
 
     private void playSound() {
-        int random = (Math.random() <= 0.5) ? 1 : 2;
         try {
-            File soundFile1 = new File(MEDIA1);
-            File soundFile2 = new File(MEDIA2);
-            AudioInputStream audioIn1 = AudioSystem.getAudioInputStream(soundFile1.toURI().toURL());
-            AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(soundFile2.toURI().toURL());
+            URL url1 = getClass().getResource(MEDIA1);
+            URL url2 = getClass().getResource(MEDIA2);
+            AudioInputStream sound1 = AudioSystem.getAudioInputStream(url1);
+            AudioInputStream sound2 = AudioSystem.getAudioInputStream(url2);
             Clip clip = AudioSystem.getClip();
-            clip.open(random == 1 ? audioIn1 : audioIn2);
+            int random = (Math.random() <= 0.5) ? 1 : 2;
+            clip.open(random == 1 ? sound1 : sound2);
             clip.start();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
